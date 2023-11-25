@@ -2,27 +2,20 @@ import React, { useEffect, useState } from 'react';
 import useFetch from '../../hooks/useFetch';
 import FoodItem from './FoodItem';
 import Skeleton from './Skeleton';
-
-interface IFood {
-  _id: string;
-  foodType: string;
-  title: string;
-  description: string;
-  price: string;
-  image: string;
-}
+import { IFood } from '../../types/food.type';
 
 const Foods: React.FC = () => {
   const [menuTab, setMenuTab] = useState<string>('Breakfast');
   const [loading, setLoading] = useState<boolean>(false);
   const [foods, setFoods] = useState<IFood[]>([]);
 
+  const fetchedFoods = useFetch('http://localhost:5000/foods');
+
   useEffect(() => {
     setLoading(true);
-    useFetch('http://localhost:5000/foods')
-      .then((data: IFood[]) => setFoods(data))
-      .finally(() => setLoading(false));
-  }, []);
+    setFoods(fetchedFoods);
+    setLoading(false);
+  }, [fetchedFoods]);
 
   const handleMenuTabs = (type: string) => {
     setMenuTab(type);

@@ -1,28 +1,20 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 
-interface IFood {
-  // Define the properties of a food item
-  id: number;
-  name: string;
-  // Add other properties as needed
-}
-
-const useFetch = () => {
-  const [foods, setFoods] = useState<IFood[]>([]);
+const useFetch = <T,>(url: string): T[] => {
+  const [data, setData] = useState<T[]>([]);
 
   useEffect(() => {
     axios
-      .get<IFood[]>('http://localhost:5000/foods')
+      .get<T[]>(url)
       .then((response) => {
-        setFoods(response.data);
+        setData(response.data);
       })
       .catch((error) => {
         console.error('Error fetching data: ', error);
       });
-  }, []);
+  }, [url]);
 
-  return [foods, setFoods];
+  return data;
 };
-
 export default useFetch;
